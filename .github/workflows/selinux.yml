@@ -99,11 +99,11 @@ jobs:
       run: |
         rm -rf $GITHUB_WORKSPACE/zip_stage && mkdir -p $GITHUB_WORKSPACE/zip_stage
         
-        if [ -d "$GITHUB_WORKSPACE/AnyKernel3-A235f" ]; then
-          cp -r $GITHUB_WORKSPACE/AnyKernel3-A235f/* $GITHUB_WORKSPACE/zip_stage/
+        if [ -d "$GITHUB_WORKSPACE/AnyKernel3-A235F" ]; then
+          cp -r $GITHUB_WORKSPACE/AnyKernel3-A235F/* $GITHUB_WORKSPACE/zip_stage/
           find $GITHUB_WORKSPACE/zip_stage/ -name "*.zip" -type f -delete
         else
-          echo "ERROR: AnyKernel3-A235f folder not found!" && exit 1
+          echo "ERROR: AnyKernel3-A235F folder not found!" && exit 1
         fi
         
         if [ -f "$GITHUB_WORKSPACE/out/arch/arm64/boot/Image" ]; then
@@ -114,7 +114,7 @@ jobs:
         
         [ -f "$GITHUB_WORKSPACE/out/arch/arm64/boot/dtbo.img" ] && cp $GITHUB_WORKSPACE/out/arch/arm64/boot/dtbo.img $GITHUB_WORKSPACE/zip_stage/dtbo.img
         
-        cd $GITHUB_WORKSPACE/zip_stage && zip -r9 $GITHUB_WORKSPACE/AnyKernel3-A235f.zip ./*
+        cd $GITHUB_WORKSPACE/zip_stage && zip -r9 $GITHUB_WORKSPACE/AnyKernel3-A235F.zip ./*
         
         # Ambil versi kernel asli dan status SELinux
         cd $GITHUB_WORKSPACE/blxyzz
@@ -127,7 +127,7 @@ jobs:
     - name: Upload to GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        files: AnyKernel3-A235f.zip
+        files: AnyKernel3-A235F.zip
         tag_name: "${{ env.RELEASE_TAG }}"
         name: "Onyx Kernel v${{ env.LINUX_VERSION }} [${{ env.SELINUX_STATUS }}]"
         body: |
