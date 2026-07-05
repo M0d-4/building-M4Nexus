@@ -129,7 +129,7 @@ jobs:
       with:
         files: AnyKernel3-A235F.zip
         tag_name: "${{ env.RELEASE_TAG }}"
-        name: "Onyx Kernel v${{ env.LINUX_VERSION }} [${{ env.SELINUX_STATUS }}]"
+        name: "M4Nexus Kernel v${{ env.LINUX_VERSION }} [${{ env.SELINUX_STATUS }}]"
         body: |
           ### Kernel Build Details
           - **Linux Version**: `v${{ env.LINUX_VERSION }}`
