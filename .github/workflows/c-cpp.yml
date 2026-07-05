@@ -1,4 +1,4 @@
-name: Build SolsticeRay 3 defconfig
+name: Build M4Nexus 3 defconfig
 
 on:
   push:
