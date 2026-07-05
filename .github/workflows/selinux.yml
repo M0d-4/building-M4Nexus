@@ -1,4 +1,4 @@
-name: Build SolsticeRay Selinux
+name: Build M4Nexus Selinux
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
       defconfig_name:
         description: 'Nama Defconfig'
         required: true
-        default: 'SolsticeRay_defconfig'
+        default: 'M4Nexus_defconfig'
       selinux_mode:
         description: 'Pilih Mode SELinux'
         required: true
