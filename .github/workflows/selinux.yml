@@ -14,13 +14,13 @@ on:
       clang_version:
         description: 'Pilih Versi Clang Compiler'
         required: true
-        default: 'clang-10'
+        default: 'clang-11'
         type: choice
         options: ['clang-10', 'clang-11', 'clang-12', 'proton-clang', 'azure-clang']
       defconfig_name:
         description: 'Nama Defconfig'
         required: true
-        default: 'M4Nexus_defconfig'
+        default: 'a23_eur_open_defconfig'
       selinux_mode:
         description: 'Pilih Mode SELinux'
         required: true
@@ -29,8 +29,9 @@ on:
         options: ['enforcing', 'permissive']
 
 jobs:
-  build-kernel:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 350
     permissions:
       contents: write
 
@@ -60,7 +61,7 @@ jobs:
         else
           git clone --depth=1 -b "$CHOSEN_CLANG" https://github.com/rsuplaygrnd/toolchains.git clang
         fi
-        git clone --depth=1 -b gcc https://github.com/blxyzY/toolchain.git gcc
+        git clone --depth=1 -b androidcc-4.9 https://github.com/blxyzY/toolchain.git gcc
     - name: Compile Kernel
       run: |
         export PATH="$GITHUB_WORKSPACE/toolchains/clang/bin:$GITHUB_WORKSPACE/toolchains/gcc/bin:$PATH"
@@ -93,8 +94,8 @@ jobs:
           sed -i 's/CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE=y/# CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE is not set/' "$DEFCONFIG_PATH"
         fi
         
-        make -j$(nproc --all) O=$OUT_DIR ARCH=arm64 CROSS_COMPILE=$GCC_64 CROSS_COMPILE_ARM32=$GCC_32 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- PROJECT_NAME=a23 $DEFCONFIG
-        make -j$(nproc --all) O=$OUT_DIR ARCH=arm64 CROSS_COMPILE=$GCC_64 CROSS_COMPILE_ARM32=$GCC_32 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- PROJECT_NAME=a23 CONFIG_SECTION_MISMATCH_WARN_ONLY=y CONFIG_DEBUG_SECTION_MISMATCH=y
+        make -j$(nproc --all) O=$OUT_DIR ARCH=arm64 CROSS_COMPILE=$GCC_64 CROSS_COMPILE_ARM32=$GCC_32 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- $DEFCONFIG
+        make -j$(nproc --all) O=$OUT_DIR ARCH=arm64 CROSS_COMPILE=$GCC_64 CROSS_COMPILE_ARM32=$GCC_32 CC=clang CLANG_TRIPLE=aarch64-linux-gnu- CONFIG_SECTION_MISMATCH_WARN_ONLY=y CONFIG_DEBUG_SECTION_MISMATCH=y
     - name: Package Kernel
       run: |
         rm -rf $GITHUB_WORKSPACE/zip_stage && mkdir -p $GITHUB_WORKSPACE/zip_stage
@@ -129,7 +130,7 @@ jobs:
       with:
         files: AnyKernel3-A235F.zip
         tag_name: "${{ env.RELEASE_TAG }}"
-        name: "M4Nexus Kernel v${{ env.LINUX_VERSION }} [${{ env.SELINUX_STATUS }}]"
+        name: "Onyx Kernel v${{ env.LINUX_VERSION }} [${{ env.SELINUX_STATUS }}]"
         body: |
           ### Kernel Build Details
           - **Linux Version**: `v${{ env.LINUX_VERSION }}`
